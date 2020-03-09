@@ -1,0 +1,10 @@
+{
+  "name": "upload-buddy",
+  "version": "1.0.0",
+  "description": "Upload Buddy makes it easy to integrate smart, interactive file uploads into any application.",
+  "main": "src/index.js",
+  "repository": "https://github.com/roydejong/upload-buddy",
+  "author": "Roy de Jong <roy@softwarepunt.nl>",
+  "license": "MIT",
+  "private": false
+}

@@ -1,0 +1,5 @@
+## IDE-specific
+.idea/workspace.xml
+
+## Build output
+build/
