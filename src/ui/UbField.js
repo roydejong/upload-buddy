@@ -137,7 +137,7 @@ export default class UbField {
     } else {
       let nameActual;
 
-      if (this._fileInfo.url) {
+      if (this._fileInfo.url && this._fileInfo.url.indexOf('data:') !== 0) {
         nameActual = `<a href="${this._fileInfo.url || "#"}" target="_blank" class="name-actual">${this._fileInfo.name || "File"}</a>`;
       } else {
         nameActual = `<span class="name-actual">${this._fileInfo.name || "File"}</span>`;
@@ -157,6 +157,7 @@ export default class UbField {
         <a class="ub-btn --delete" href="#">${this._config.text.delete}</a>
     </div>
   </div>
+  ${this._renderExtensions()}
 `;
     }
 
@@ -198,7 +199,24 @@ export default class UbField {
   }
 
   // -------------------------------------------------------------------------------------------------------------------
-  // Events
+  // File extensions
+
+  _renderExtensions() {
+    let output = "";
+
+    if (this._fileInfo) {
+      this._config.extensions.forEach((extension) => {
+        if (extension.match(this._fileInfo) === true) {
+          output += extension.render(this._fileInfo);
+        }
+      });
+    }
+
+    return output;
+  }
+
+// -------------------------------------------------------------------------------------------------------------------
+// Events
 
   _onBrowseClick(e) {
     e.preventDefault();
@@ -272,8 +290,8 @@ export default class UbField {
     this._setUp();
   }
 
-  // -------------------------------------------------------------------------------------------------------------------
-  // Upload logic
+// -------------------------------------------------------------------------------------------------------------------
+// Upload logic
 
   _handleFiles(files) {
     files = [...files];
@@ -288,8 +306,23 @@ export default class UbField {
       return;
     }
 
+    // Modify local state, add file info
     const file = files[0];
     console.log('[upload-buddy]', '(UbField)', 'File selection:', file);
+
     this._fileInfo = file;
+    this._fileInfo.uploaded = false;
+    this._fileInfo.url = null;
+
+    // Read as base64 URL for preview purposes
+    let reader = new FileReader();
+    reader.onloadend = () => {
+      const result = reader.result;
+      if (result && this._fileInfo.name === file.name && !this._fileInfo.url) {
+        this._fileInfo.url = result;
+        this._setUp();
+      }
+    };
+    reader.readAsDataURL(file);
   }
 }

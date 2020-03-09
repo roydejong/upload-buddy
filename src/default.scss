@@ -15,14 +15,15 @@ $colGreen: #27ae60;
 
 .UbField {
   display: flex;
+  flex-direction: column;
   border-radius: 6px;
   border: 1px solid $colGray1;
   background: #fff;
   overflow: hidden;
+  transition: all .1s ease;
 
   &.--no-file {
     border-style: dashed;
-    transition: all .5s ease;
   }
   &.--dropping-file {
     border-style: dashed;
@@ -149,6 +150,25 @@ $colGreen: #27ae60;
   > .ub-btn {
     display: none;
   }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+.UbField .ext-image-preview {
+  display: block;
+  flex-grow: 1;
+  flex-shrink: 1;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  min-height: 100px;
+  max-height: 333px;
+  background: #eee;
+  object-fit: cover;
+  border: none;
+  border-top: 1px solid $colGray1;
+  margin: 0;
+  padding: 0;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------

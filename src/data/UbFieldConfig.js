@@ -1,8 +1,8 @@
+import UbImagePreviewExtension from "../extensions/UbImagePreviewExtension";
+
 export default class UbFieldConfig {
   constructor(props) {
-    if (!props) {
-      props = UbFieldConfig.defaults;
-    }
+    props = Object.assign({ }, UbFieldConfig.defaults, props || { });
 
     // -----------------------------------------------------------------------------------------------------------------
     // Basic props
@@ -20,8 +20,9 @@ export default class UbFieldConfig {
 
     if (props.file) {
       this.file = Object.assign({}, {
-        name: "unknown",
-        size: 1000
+        name: "unknown_file",
+        size: 0,
+        uploaded: true
       }, props.file);
     }
 
@@ -61,6 +62,9 @@ export default class UbFieldConfig {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+    // Extensions
+
+    this.extensions = props.extensions || [];
   }
 }
 
@@ -68,5 +72,8 @@ export default class UbFieldConfig {
 // Defaults
 
 UbFieldConfig.defaults = {
-  lang: "en"
+  lang: "en",
+  extensions: [
+    UbImagePreviewExtension
+  ]
 };
