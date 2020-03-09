@@ -208,6 +208,10 @@ export default class UbField {
   }
 
   _onDragEnter(e) {
+    if (e) {
+      e.preventDefault();
+    }
+
     if (!this._isDropArea) {
       this._isDropArea = true;
       this._element.classList.add("--dropping-file");
@@ -215,7 +219,7 @@ export default class UbField {
     }
   }
 
-  _onDragLeave(e) {
+  _onDragLeave() {
     if (this._isDropArea) {
       this._isDropArea = false;
       this._element.classList.remove("--dropping-file");
@@ -224,18 +228,38 @@ export default class UbField {
   }
 
   _onDragOver(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
+
     this._onDragEnter();
   }
 
   _onDrop(e) {
+    e.preventDefault();
+
+    // Trigger "drag leave" logic to clean up UI
     this._onDragLeave();
+
+    // Handle files & refresh UI
+    const dt = e.dataTransfer;
+    const files = dt.files;
+
+    this._handleFiles(files);
+    this._setUp();
   }
 
   _onFieldChange(e) {
-    // Refresh UI, file may have been added/removed
+    // Handle files & refresh UI
+    this._handleFiles(this._field.files);
     this._setUp();
   }
-}
 
-// ---------------------------------------------------------------------------------------------------------------------
-// HTML Templates
+  // -------------------------------------------------------------------------------------------------------------------
+  // Upload logic
+
+  _handleFiles(files) {
+    files = [...files];
+
+    console.log('files:', files);
+  }
+}
