@@ -36,7 +36,7 @@ UbField.setup('#the-file', {
   // Built-in languages: en, nl
   lang: "nl",
 
-  // Custom text overrides / translations
+  // Individual text overrides / translations:
   text: {
     "drop_file": "🔥 Drop it like it's hot 🔥"
   },
@@ -45,7 +45,8 @@ UbField.setup('#the-file', {
   file: {
     name: "sample.png",
     size: 1024,
-    url: "/uploads/sample.png"
+    url: "/uploads/sample.png",
+    type: "image/png"
   }
 });
 ```

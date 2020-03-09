@@ -47,6 +47,7 @@ $colGreen: #27ae60;
   text-align: center;
   overflow: hidden;
   transition: all .1s ease;
+  border: 1px solid rgba(0, 0, 0, .1);
 
   &.--delete {
     background: $colRed;
