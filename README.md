@@ -40,6 +40,13 @@ UbField.setup('#the-file', {
   text: {
     "drop_file": "🔥 Drop it like it's hot 🔥"
   },
+
+  // To show already-selected file on the UI:
+  file: {
+    name: "sample.png",
+    size: 1024,
+    url: "/uploads/sample.png"
+  }
 });
 ```
 

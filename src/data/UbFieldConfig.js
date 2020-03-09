@@ -5,6 +5,27 @@ export default class UbFieldConfig {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+    // Basic props
+
+    Object.keys(props).forEach((key) => {
+      if (this.hasOwnProperty(key) && props.hasOwnProperty(key)) {
+        this[key] = props[key];
+      }
+    });
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Simulated file info
+
+    this.file = null;
+
+    if (props.file) {
+      this.file = Object.assign({}, {
+        name: "unknown",
+        size: 1000
+      }, props.file);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
     // Text & built-in translations
 
     this.text = {

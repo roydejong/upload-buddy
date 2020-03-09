@@ -1,4 +1,5 @@
 $colGray1: #BEC6C6;
+$colGray3: #989e9e;
 $colGray5: #646868;
 
 $colAccent: #0073E9;
@@ -69,17 +70,43 @@ $colGreen: #27ae60;
   min-height: 59px;
   padding: 15px;
 
-  > .message {
-    justify-self: flex-start;
+  > .details {
     display: flex;
+    flex-direction: column;
     flex-grow: 1;
-    color: $colGreen;
-    font-weight: 600;
-    transition: color .1s ease;
-  }
-  > .ub-btn {
-    justify-self: flex-end;
-    flex-grow: 0;
+    padding-right: 15px;
+
+    .status {
+      margin: 0 0 5px 0;
+      padding: 0;
+      display: inline-flex;
+      font-size: 14px;
+      color: $colGreen;
+    }
+
+    .name {
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: wrap;
+      font-size: 14px;
+
+      > span, > a {
+        margin-right: 5px;
+        line-height: 1.5;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+      > .name-actual {
+        font-family: monospace;
+        color: $colAccent;
+        font-weight: 600;
+      }
+      > .size {
+        color: $colGray3;
+      }
+    }
   }
 }
 

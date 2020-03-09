@@ -78,6 +78,7 @@ export default class UbField {
     // State info
     this._isDropArea = false;
     this._isDeleting = false;
+    this._fileInfo = null;
 
     // Event bindings
     this._onBrowseClick = this._onBrowseClick.bind(this);
@@ -115,29 +116,46 @@ export default class UbField {
 
     let hasFile = !!this._field.value;
 
+    if (this._config.file && !this._isDeleting) {
+      // Already-selected file info for the UI
+      this._fileInfo = this._config.file;
+      hasFile = true;
+    }
+
     if (!hasFile) {
       element.classList.add("--no-file");
 
-      if (this._isDropArea) {
-        element.innerHTML = `
-  <div class="no-file --dropping">
-    <span class="message">${this._config.text.drop_file}</span>
-  </div>
-`;
-      } else {
-        element.innerHTML = `
+      if (this._isDropArea)
+        element.classList.add("--dropping-file");
+
+      element.innerHTML = `
   <div class="no-file">
-    <span class="message">${this._config.text.no_file}</span>
+    <span class="message">${this._isDropArea ? this._config.text.drop_file : this._config.text.no_file}</span>
     <a class="ub-btn --browse" href="#">${this._config.text.browse}</a>
   </div>
 `;
-      }
     } else {
+      let nameActual;
+
+      if (this._fileInfo.url) {
+        nameActual = `<a href="${this._fileInfo.url || "#"}" target="_blank" class="name-actual">${this._fileInfo.name || "File"}</a>`;
+      } else {
+        nameActual = `<span class="name-actual">${this._fileInfo.name || "File"}</span>`;
+      }
+
       element.classList.add("--has-file");
       element.innerHTML = `
   <div class="file-selected">
-    <span class="message">${this._config.text.file_selected}</span>
-    <a class="ub-btn --delete" href="#">${this._config.text.delete}</a>
+    <div class="details">
+        <h6 class="status">${this._config.text.file_selected}</h6>
+        <div class="name">
+            ${nameActual}
+            <span class="size">(${Math.ceil(this._fileInfo.size / 1024)}kb)</span>
+        </div>
+    </div>
+    <div class="controls">
+        <a class="ub-btn --delete" href="#">${this._config.text.delete}</a>
+    </div>
   </div>
 `;
     }
@@ -260,6 +278,18 @@ export default class UbField {
   _handleFiles(files) {
     files = [...files];
 
-    console.log('files:', files);
+    if (files.length === 0) {
+      return;
+    }
+
+    if (files.length > 1) {
+      // TODO Nice UI Error
+      alert('1 file limit');
+      return;
+    }
+
+    const file = files[0];
+    console.log('[upload-buddy]', '(UbField)', 'File selection:', file);
+    this._fileInfo = file;
   }
 }
