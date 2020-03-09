@@ -5,11 +5,12 @@ export default class UbFieldConfig {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    // Locale
+    // Text & built-in translations
 
     this.text = {
       "no_file": "Drop a file here",
       "drop_file": "Drop it like it's hot",
+      "file_selected": "File selected",
       "browse": "Browse"
     };
 
@@ -21,14 +22,23 @@ export default class UbFieldConfig {
       }
     };
 
+    // -----------------------------------------------------------------------------------------------------------------
+    // Language & text overrides
+
     if (props.lang && props.lang !== "en") {
       if (this.translations[props.lang]) {
-        this.text = this.translations[props.lang];
+        this.text = Object.assign({ }, this.text, this.translations[props.lang]);
       } else {
         console.warn('[upload-buddy]', '(UbFieldConfig)',
           'Invalid language setting (translations do not exist):', props.lang);
       }
     }
+
+    if (props.text) {
+      this.text = Object.assign({ }, this.text, props.text);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
   }
 }
 

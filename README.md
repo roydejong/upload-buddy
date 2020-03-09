@@ -5,8 +5,6 @@
 This package is available for installation via npm as `release-buddy`:
 
 ```shell script
-npm install release-buddy
-# or, if you prefer: #
 yarn install release-buddy
 ```
 
@@ -26,15 +24,23 @@ Simply include `upbud.min.js` from `dist` on any page you want to use the librar
 ### Features
 UbField is a user-friendly, drop-in replacement for your existing `file` upload field in any HTML form. It offers the following features:
 
-- User-friendly UI with drag & drop support
-- Upload directly via Ajax, or use regular HTTP form submission
-- Useful extensions for supported file types (e.g. preview, image cropping, etc)
+- 😊 User-friendly UI with drag & drop support
+- ⬆ Direct server upload via Ajax
+- ⭐ Useful extensions for supported file types (e.g. preview, image cropping, etc)
 
-### Setup
+### Configuration
 Simply pass in a document query for the `file` input you wish to replace, plus any options:
 
 ```javascript
 UbField.setup('#the-file', {
-  
+  // Built-in languages: en, nl
+  lang: "nl",
+
+  // Custom text overrides / translations
+  text: {
+    "drop_file": "🔥 Drop it like it's hot 🔥"
+  },
 });
 ```
+
+Note: You can set the global default configuration for `UbField` by modifying the value of `UbFieldConfig.defaults`.
