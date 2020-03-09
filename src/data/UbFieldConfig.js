@@ -11,7 +11,8 @@ export default class UbFieldConfig {
       "no_file": "Drop a file here",
       "drop_file": "Drop it like it's hot",
       "file_selected": "File selected",
-      "browse": "Browse"
+      "browse": "Browse",
+      "delete": "Remove"
     };
 
     this.translations = {

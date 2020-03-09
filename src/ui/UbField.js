@@ -77,13 +77,18 @@ export default class UbField {
 
     // State info
     this._isDropArea = false;
+    this._isDeleting = false;
 
     // Event bindings
     this._onBrowseClick = this._onBrowseClick.bind(this);
+    this._onDeleteClick = this._onDeleteClick.bind(this);
+
     this._onDragEnter = this._onDragEnter.bind(this);
     this._onDragLeave = this._onDragLeave.bind(this);
     this._onDragOver = this._onDragOver.bind(this);
     this._onDrop = this._onDrop.bind(this);
+
+    this._onFieldChange = this._onFieldChange.bind(this);
 
     // Go!
     this._setUp();
@@ -108,7 +113,7 @@ export default class UbField {
     element.className = "";
     element.classList.add("UbField");
 
-    let hasFile = false;
+    let hasFile = !!this._field.value;
 
     if (!hasFile) {
       element.classList.add("--no-file");
@@ -128,7 +133,13 @@ export default class UbField {
 `;
       }
     } else {
-
+      element.classList.add("--has-file");
+      element.innerHTML = `
+  <div class="file-selected">
+    <span class="message">${this._config.text.file_selected}</span>
+    <a class="ub-btn --delete" href="#">${this._config.text.delete}</a>
+  </div>
+`;
     }
 
     // Insert replacement to parent
@@ -138,9 +149,17 @@ export default class UbField {
     parent.appendChild(this._element);
 
     // Event binding
+    this._field.removeEventListener('change', this._onFieldChange);
+    this._field.addEventListener('change', this._onFieldChange);
+
     document.querySelectorAll(".ub-btn.--browse").forEach((element) => {
       element.removeEventListener('click', this._onBrowseClick);
       element.addEventListener('click', this._onBrowseClick);
+    });
+
+    document.querySelectorAll(".ub-btn.--delete").forEach((element) => {
+      element.removeEventListener('click', this._onDeleteClick);
+      element.addEventListener('click', this._onDeleteClick);
     });
 
     document.querySelectorAll(".UbField").forEach((element) => {
@@ -166,7 +185,25 @@ export default class UbField {
   _onBrowseClick(e) {
     e.preventDefault();
     e.stopPropagation();
+
+    // "Click" the field to force browse dialog to open
     this._field.click();
+
+    return false;
+  }
+
+  _onDeleteClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Clear selection
+    this._field.value = "";
+    this._isDeleting = true;
+    this._isDropArea = false;
+
+    // Refresh UI
+    this._setUp();
+
     return false;
   }
 
@@ -192,6 +229,11 @@ export default class UbField {
 
   _onDrop(e) {
     this._onDragLeave();
+  }
+
+  _onFieldChange(e) {
+    // Refresh UI, file may have been added/removed
+    this._setUp();
   }
 }
 

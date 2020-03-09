@@ -3,6 +3,9 @@ $colGray5: #646868;
 
 $colAccent: #0073E9;
 
+$colRed: #e74c3c;
+$colGreen: #27ae60;
+
 // ---------------------------------------------------------------------------------------------------------------------
 
 .UbField, .UbField * {
@@ -43,11 +46,40 @@ $colAccent: #0073E9;
   overflow: hidden;
   transition: all .1s ease;
 
+  &.--delete {
+    background: $colRed;
+    color: #fff;
+  }
+
   &:hover {
     box-shadow: inset 0 0 999px rgba(255, 255, 255, .1);
   }
   &:active {
     box-shadow: inset 0 0 999px rgba(0, 0, 0, .1);
+  }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+.UbField > .file-selected {
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  display: flex;
+  min-height: 59px;
+  padding: 15px;
+
+  > .message {
+    justify-self: flex-start;
+    display: flex;
+    flex-grow: 1;
+    color: $colGreen;
+    font-weight: 600;
+    transition: color .1s ease;
+  }
+  > .ub-btn {
+    justify-self: flex-end;
+    flex-grow: 0;
   }
 }
 
