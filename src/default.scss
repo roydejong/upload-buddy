@@ -1,0 +1,95 @@
+$colGray1: #BEC6C6;
+$colGray5: #646868;
+
+$colAccent: #0073E9;
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+.UbField, .UbField * {
+  box-sizing: border-box;
+}
+
+.UbField {
+  display: flex;
+  border-radius: 6px;
+  border: 1px solid $colGray1;
+  background: #fff;
+  overflow: hidden;
+
+  &.--no-file {
+    border-style: dashed;
+    transition: all .5s ease;
+  }
+  &.--dropping-file {
+    border-style: dashed;
+    border-color: $colAccent;
+  }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+.UbField .ub-btn {
+  display: inline-flex;
+  background: $colAccent;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  padding: 0 10px;
+  font-size: 14px;
+  min-height: 29px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  transition: all .1s ease;
+
+  &:hover {
+    box-shadow: inset 0 0 999px rgba(255, 255, 255, .1);
+  }
+  &:active {
+    box-shadow: inset 0 0 999px rgba(0, 0, 0, .1);
+  }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+.UbField > .no-file {
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  display: flex;
+  min-height: 59px;
+  padding: 15px;
+
+  > .message {
+    justify-self: flex-start;
+    display: flex;
+    flex-grow: 1;
+    color: $colGray5;
+    font-weight: 600;
+    transition: color .1s ease;
+  }
+  > .ub-btn {
+    justify-self: flex-end;
+    flex-grow: 0;
+  }
+}
+
+.UbField.--dropping-file > .no-file {
+  background: rgba(0, 155, 233, 0.1);
+
+  &, > .message {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+  }
+  > .message {
+    color: $colAccent;
+  }
+  > .ub-btn {
+    display: none;
+  }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------

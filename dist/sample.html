@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>UploadBuddy Sample</title>
+    <link rel="stylesheet" href="sample.css"/>
+    <link rel="stylesheet" href="default.css"/>
+</head>
+<body>
+
+<form method="post" enctype="multipart/form-data" id="the-form">
+
+    <div>
+        <label for="the-file">Upload field:</label>
+        <input id="the-file" type="file"/>
+    </div>
+
+    <hr/>
+
+    <div>
+        <button type="submit">Submit form</button>
+    </div>
+
+</form>
+
+<script src="upbud.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function (e) {
+    UbField.setup('#the-file', {
+      // lang: "nl"
+    });
+  });
+</script>
+
+</body>
+</html>
