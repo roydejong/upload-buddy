@@ -374,53 +374,33 @@ export default class UbField {
 
     console.log('[upload-buddy]', '(UbField)', 'File upload:', url, payload);
 
-    let options = {
-      method: 'POST',
-      body: payload,
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest'
-      }
-    };
-
-    fetch(url, options)
-    .then((res) => {
-      if (res.status === 200) {
-        // Upload success
-        this._isUploading = false;
-        this._uploadProgress = 100;
-
-        if (this._fileInfo.name === file.name) {
-          this._fileInfo.uploaded = true;
-        }
-
-        // TODO Handle optional file URL from response
-      } else {
-        // Upload failure
-        this._isUploading = false;
-        this._uploadProgress = 0;
-
-        this._error = this._config.text.upload_failed;
-
-        this._field.value = "";
-        this._fileInfo = null;
-
-        this._setUp();
-
-        // TODO Handle optional error from response body
-      }
-    })
-    .catch((err) => {
-      console.error('[upload-buddy]', '(UbField)', 'File upload error:', err);
-
-      this._isUploading = false;
-      this._uploadProgress = 0;
-
-      this._error = this._config.text.upload_failed;
-
-      this._field.value = "";
-      this._fileInfo = null;
-
-      this._setUp();
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', url, true);
+    xhr.upload.addEventListener("progress", (e) => {
+      this._uploadProgress = ((e.loaded * 100.0 / e.total) || 100);
+      this._setUp(); // TODO Optimize, prevent full re-render
     });
+    xhr.addEventListener('readystatechange', (e) => {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          // Done. Inform the user
+          alert('upload win'); // TODO UI work
+        } else {
+          // Non-200 state
+          console.error('[upload-buddy]', '(UbField)', 'File upload error:', xhr.responseText);
+
+          this._isUploading = false;
+          this._uploadProgress = 0;
+
+          this._error = this._config.text.upload_failed;
+
+          this._field.value = "";
+          this._fileInfo = null;
+
+          this._setUp();
+        }
+      }
+    });
+    xhr.send(payload);
   }
 }

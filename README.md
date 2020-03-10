@@ -68,3 +68,6 @@ On upload, a `POST` HTTP request will be sent to the configured `target` URL. Th
 **On success:** Your endpoint should respond with a `200 OK` if the upload was successful. You may include the final file URL as plain-text in your response.
 
 **On failure:** Your endpoint should return any non-200 status code. You may include a plain-text error message in the response body that will be shown to the user.
+
+### Form integration
+This field is ideal for form integration. 
