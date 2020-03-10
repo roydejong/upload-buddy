@@ -408,10 +408,15 @@ export default class UbField {
     console.log('[upload-buddy]', '(UbField)', 'File upload:', url, payload);
 
     let xhr = new XMLHttpRequest();
+
     xhr.open('POST', url, true);
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
     xhr.upload.addEventListener("progress", (e) => {
-      this._uploadProgress = ((e.loaded * 100.0 / e.total) || 100);
-      this._element.querySelector(".ub-prog .prog-inner").style.width = `${this._uploadProgress.toFixed(2)}%`;
+      if (e.total) {
+        this._uploadProgress = ((e.loaded * 100.0 / e.total) || 100);
+        this._element.querySelector(".ub-prog .prog-inner").style.width = `${this._uploadProgress.toFixed(2)}%`;
+      }
     });
     xhr.addEventListener('readystatechange', (e) => {
       if (xhr.readyState === 4) {
@@ -423,7 +428,7 @@ export default class UbField {
           console.error('[upload-buddy]', '(UbField)', 'File upload error:', xhr.responseText);
 
           this._isUploading = false;
-          this._uploadProgress = 0;
+          this._uploadProgress = 100;
 
           this._error = this._config.text.upload_failed;
 
