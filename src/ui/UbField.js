@@ -480,8 +480,6 @@ export default class UbField {
           this._fileInfo.uploaded = true;
           this._backField.value = JSON.stringify(this._fileInfo);
 
-          alert(this._backField.value);
-
           this._setUp();
         } else {
           // Non-200 state
