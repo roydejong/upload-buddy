@@ -28,6 +28,8 @@ UbField is a user-friendly, drop-in replacement for your existing `file` upload 
 - ⬆ Direct server upload via Ajax
 - ⭐ Useful extensions for supported file types (e.g. preview, image cropping, etc)
 
+![UbField in action](docs/ss-control-filled.png)
+
 ### Configuration
 Simply pass in a document query for the `file` input you wish to replace, plus any options:
 
