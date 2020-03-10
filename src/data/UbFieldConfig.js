@@ -7,6 +7,13 @@ export default class UbFieldConfig {
     // -----------------------------------------------------------------------------------------------------------------
     // Basic props
 
+    /**
+     * File upload target URL for HTTP POST.
+     *
+     * @type {string}
+     */
+    this.target = "/set-upload-endpoint";
+
     Object.keys(props).forEach((key) => {
       if (this.hasOwnProperty(key) && props.hasOwnProperty(key)) {
         this[key] = props[key];
@@ -16,6 +23,11 @@ export default class UbFieldConfig {
     // -----------------------------------------------------------------------------------------------------------------
     // Simulated file info
 
+    /**
+     * File information to be shown, as an "already selected" file.
+     *
+     * @type {object|null}
+     */
     this.file = null;
 
     if (props.file) {

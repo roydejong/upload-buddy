@@ -79,6 +79,8 @@ export default class UbField {
     this._isDropArea = false;
     this._isDeleting = false;
     this._fileInfo = null;
+    this._isUploading = false;
+    this._uploadProgress = 0.0;
 
     // Event bindings
     this._onBrowseClick = this._onBrowseClick.bind(this);
@@ -290,13 +292,19 @@ export default class UbField {
     this._setUp();
   }
 
-// -------------------------------------------------------------------------------------------------------------------
-// Upload logic
+  // -------------------------------------------------------------------------------------------------------------------
+  // Upload logic
 
   _handleFiles(files) {
     files = [...files];
 
     if (files.length === 0) {
+      // No input, ignore
+      return;
+    }
+
+    if (this._isUploading) {
+      // Already uploading, ignore
       return;
     }
 
@@ -315,14 +323,72 @@ export default class UbField {
     this._fileInfo.url = null;
 
     // Read as base64 URL for preview purposes
-    let reader = new FileReader();
-    reader.onloadend = () => {
-      const result = reader.result;
-      if (result && this._fileInfo.name === file.name && !this._fileInfo.url) {
-        this._fileInfo.url = result;
-        this._setUp();
+    try {
+      let reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result;
+        if (result && this._fileInfo.name === file.name && !this._fileInfo.url) {
+          this._fileInfo.url = result;
+          this._setUp();
+        }
+      };
+      reader.readAsDataURL(file);
+    } catch (err) {
+      console.warn('[upload-buddy]', '(UbField)', 'Preview URL could not be generated:', err);
+    }
+
+    // Perform the upload
+    this._uploadFile(file);
+  }
+
+  _uploadFile(file) {
+    if (this._isUploading) {
+      // TODO handle better
+      alert('upload already in progress');
+      return;
+    }
+
+    this._isUploading = true;
+    this._uploadProgress = 0;
+
+    const url = this._config.target;
+
+    let payload = new FormData();
+    payload.append('file', file);
+
+    console.log('[upload-buddy]', '(UbField)', 'File upload:', url, payload);
+
+    fetch(url, {
+      method: 'POST',
+      body: payload
+    })
+    .then((res) => {
+      if (res.status === 200) {
+        // Upload success
+        this._isUploading = false;
+        this._uploadProgress = 100;
+
+        if (this._fileInfo.name === file.name) {
+          this._fileInfo.uploaded = true;
+        }
+
+        // TODO Handle optional file URL from response
+      } else {
+        // Upload failure
+        this._isUploading = false;
+        this._uploadProgress = 100;
+
+        alert('upload failure');
+
+        // TODO Handle optional error from response + error UI
       }
-    };
-    reader.readAsDataURL(file);
+    })
+    .catch((err) => {
+      this._isUploading = false;
+      this._uploadProgress = 0;
+
+      // TODO Nice UI Error
+      alert('upload errored: ' + err);
+    });
   }
 }

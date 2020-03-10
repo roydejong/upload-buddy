@@ -33,7 +33,10 @@ Simply pass in a document query for the `file` input you wish to replace, plus a
 
 ```javascript
 UbField.setup('#the-file', {
-  // Built-in languages: en, nl
+  // Define upload target:
+  target: "/my_upload_endpoint",
+
+  // Set a built-in language (en, nl):
   lang: "nl",
 
   // Individual text overrides / translations:
@@ -41,7 +44,7 @@ UbField.setup('#the-file', {
     "drop_file": "🔥 Drop it like it's hot 🔥"
   },
 
-  // To show already-selected file on the UI:
+  // To show pre-filled file on the UI:
   file: {
     name: "sample.png",
     size: 1024,
@@ -52,3 +55,16 @@ UbField.setup('#the-file', {
 ```
 
 Note: You can set the global default configuration for `UbField` by modifying the value of `UbFieldConfig.defaults`.
+
+### Uploads
+
+#### Client request
+Whenever the user selects a file in the UI - either by dropping it on the field or by browsing to it - uploading begins.
+
+On upload, a `POST` HTTP request will be sent to the configured `target` URL. The request will contain form data, with the file data under the `file` key. 
+
+#### Server response
+
+**On success:** Your endpoint should respond with a `200 OK` if the upload was successful. You may include the final file URL as plain-text in your response.
+
+**On failure:** Your endpoint should return any non-200 status code. You may include a plain-text error message in the response body that will be shown to the user.
