@@ -56,7 +56,12 @@ export default class UbFieldConfig {
       "nl": {
         "no_file": "Kies een bestand",
         "drop_file": "Drop je bestand hier",
-        "browse": "Bladeren"
+        "file_selected": "Bestand geselecteerd",
+        "browse": "Bladeren",
+        "delete": "Verwijderen",
+        "already_uploading": "Er is al een upload bezig",
+        "max_files_error": "Kies maximaal 1 bestand",
+        "upload_failed": "Het bestand kon niet geüpload worden"
       }
     };
 
