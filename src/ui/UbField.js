@@ -179,7 +179,7 @@ export default class UbField {
     this._element = element;
 
     const parent = this._field.parentElement;
-    parent.appendChild(this._element);
+    parent.insertBefore(this._element, this._field);
 
     // Event binding
     this._field.removeEventListener('change', this._onFieldChange);
@@ -374,10 +374,15 @@ export default class UbField {
 
     console.log('[upload-buddy]', '(UbField)', 'File upload:', url, payload);
 
-    fetch(url, {
+    let options = {
       method: 'POST',
-      body: payload
-    })
+      body: payload,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    };
+
+    fetch(url, options)
     .then((res) => {
       if (res.status === 200) {
         // Upload success
