@@ -406,8 +406,6 @@ export default class UbField {
     let payload = new FormData();
     payload.append('file', file);
 
-    console.log('[upload-buddy]', '(UbField)', 'File upload:', url, payload);
-
     let xhr = new XMLHttpRequest();
 
     xhr.open('POST', url, true);
@@ -423,10 +421,29 @@ export default class UbField {
       if (xhr.readyState === 4) {
         if (xhr.status === 200) {
           // Done. Update the UI
+          console.log('[upload-buddy]', '(UbField)', 'File upload success:', xhr.responseText);
+
           this._isUploading = false;
           this._uploadProgress = 100;
+          this._error = "";
 
-          this.error = "";
+          if (xhr.responseText) {
+            try {
+              // If a JSON object is returned in the response body, we will take it on board as file metadata
+              // This can be useful for passing back stuff like upload IDs through the form submission
+              let asObject = JSON.parse(xhr.responseText);
+
+              if (asObject && typeof asObject === "object") {
+                this._fileInfo = Object.assign({ }, {
+                  name: this._fileInfo.name,
+                  size: this._fileInfo.size,
+                  url: this._fileInfo.url,
+                  type: this._fileInfo.type
+                }, asObject);
+              }
+            } catch (e) {
+            }
+          }
 
           this._fileInfo.uploaded = true;
 
@@ -437,11 +454,16 @@ export default class UbField {
 
           this._isUploading = false;
           this._uploadProgress = 100;
-
-          this._error = this._config.text.upload_failed;
-
           this._field.value = "";
           this._fileInfo = null;
+
+          if (xhr.responseText && xhr.responseText.indexOf('<') === -1) {
+            // Looks like a plain text error message, not HTML
+            this._error = xhr.responseText;
+          } else {
+            // Doesn't look like an error message we can display, use generic error
+            this._error = this._config.text.upload_failed;
+          }
 
           this._setUp();
         }
