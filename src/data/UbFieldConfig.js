@@ -42,7 +42,7 @@ export default class UbFieldConfig {
     // Text & built-in translations
 
     this.text = {
-      "no_file": "Drop a file here",
+      "no_file": "Select or drop a file here",
       "drop_file": "Drop it like it's hot",
       "file_selected": "File selected",
       "browse": "Browse",
@@ -55,7 +55,7 @@ export default class UbFieldConfig {
 
     this.translations = {
       "nl": {
-        "no_file": "Kies een bestand",
+        "no_file": "Kies of drop hier een bestand",
         "drop_file": "Drop je bestand hier",
         "file_selected": "Bestand geselecteerd",
         "browse": "Bladeren",

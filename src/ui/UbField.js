@@ -60,6 +60,14 @@ export default class UbField {
     this._field = element;
 
     /**
+     * The form element hosting us.
+     *
+     * @type {Element}
+     * @private
+     */
+    this._form = element.form;
+
+    /**
      * The replacement element (UbField div).
      *
      * @type {Element|null}
@@ -75,6 +83,16 @@ export default class UbField {
      */
     this._config = ubfConfig;
 
+    // Create backing field
+    this._backField = document.createElement('input');
+    this._backField.name = this._field.name;
+    this._backField.value = "";
+    this._backField.style.display = "none";
+    this._backField.style.visibility = "hidden";
+    this._form.appendChild(this._backField);
+
+    this._field.name = `${this._backField.name}_old`;
+
     // State info
     this._error = "";
     this._isDropArea = false;
@@ -83,7 +101,7 @@ export default class UbField {
     this._isUploading = false;
     this._uploadProgress = 0.0;
 
-    // Event bindings
+    // Event references
     this._onBrowseClick = this._onBrowseClick.bind(this);
     this._onDeleteClick = this._onDeleteClick.bind(this);
 
@@ -93,6 +111,11 @@ export default class UbField {
     this._onDrop = this._onDrop.bind(this);
 
     this._onFieldChange = this._onFieldChange.bind(this);
+
+    this._onFormSubmit = this._onFormSubmit.bind(this);
+
+    // Form binding
+    this._form.addEventListener("submit", this._onFormSubmit);
 
     // Go!
     this._setUp();
@@ -128,15 +151,15 @@ export default class UbField {
     }
 
     // Determine whether we are presenting a file, or presenting an upload field
-    let hasFile = !!this._field.value;
+    let hasFile = (!!this._field.value || (this._fileInfo && this._fileInfo.uploaded) || this._isUploading);
 
     if (this._config.file && !this._isDeleting) {
       // Already-selected file info for the UI
       this._fileInfo = this._config.file;
-      hasFile = true;
-    }
 
-    if (this._isUploading) {
+      this._backField.value = JSON.stringify(this._fileInfo);
+      this._field.value = "";
+
       hasFile = true;
     }
 
@@ -287,6 +310,10 @@ export default class UbField {
     this._field.value = "";
     this._isDeleting = true;
     this._isDropArea = false;
+    this._fileInfo = null;
+
+    // Update backing field
+    this._backField.value = "";
 
     // Refresh UI
     this._setUp();
@@ -339,6 +366,9 @@ export default class UbField {
     // Handle files & refresh UI
     this._handleFiles(this._field.files);
     this._setUp();
+  }
+
+  _onFormSubmit(e) {
   }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -400,6 +430,7 @@ export default class UbField {
 
     this._isUploading = true;
     this._uploadProgress = 0;
+    this._backField.value = "";
 
     const url = this._config.target;
 
@@ -445,7 +476,11 @@ export default class UbField {
             }
           }
 
+          this._field.value = "";
           this._fileInfo.uploaded = true;
+          this._backField.value = JSON.stringify(this._fileInfo);
+
+          alert(this._backField.value);
 
           this._setUp();
         } else {
@@ -454,8 +489,10 @@ export default class UbField {
 
           this._isUploading = false;
           this._uploadProgress = 100;
+
           this._field.value = "";
           this._fileInfo = null;
+          this._backField.value = "";
 
           if (xhr.responseText && xhr.responseText.indexOf('<') === -1) {
             // Looks like a plain text error message, not HTML
