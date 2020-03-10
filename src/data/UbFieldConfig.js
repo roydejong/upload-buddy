@@ -49,7 +49,8 @@ export default class UbFieldConfig {
       "delete": "Remove",
       "already_uploading": "An upload is already in progress",
       "max_files_error": "You can only upload one file",
-      "upload_failed": "Upload failed"
+      "upload_failed": "Upload failed",
+      "file_uploading": "Uploading file..."
     };
 
     this.translations = {
@@ -61,7 +62,8 @@ export default class UbFieldConfig {
         "delete": "Verwijderen",
         "already_uploading": "Er is al een upload bezig",
         "max_files_error": "Kies maximaal 1 bestand",
-        "upload_failed": "Het bestand kon niet geüpload worden"
+        "upload_failed": "Het bestand kon niet geüpload worden",
+        "file_uploading": "Bestand wordt geupload..."
       }
     };
 

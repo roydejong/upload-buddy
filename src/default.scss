@@ -25,6 +25,7 @@ $colGreen: #27ae60;
   &.--no-file {
     border-style: dashed;
   }
+
   &.--dropping-file {
     border-style: dashed;
     border-color: $colAccent;
@@ -57,8 +58,33 @@ $colGreen: #27ae60;
   &:hover {
     box-shadow: inset 0 0 999px rgba(255, 255, 255, .1);
   }
+
   &:active {
     box-shadow: inset 0 0 999px rgba(0, 0, 0, .1);
+  }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+$progHeight: 12px;
+
+.UbField .ub-prog {
+  background: $colGray1;
+  display: flex;
+  flex-grow: 1;
+  min-width: ($progHeight * 12);
+  width: auto;
+
+  &, .prog-inner {
+    height: $progHeight;
+    border-radius: 6px;
+    box-shadow: inset 0 0 3px 1px rgba(0, 0, 0, .05);
+  }
+
+  .prog-inner {
+    background: $colAccent;
+    box-shadow: 0 0 5px 1px rgba(0, 0, 255, .05);
+    transition: all .1s ease;
   }
 }
 
@@ -79,12 +105,8 @@ $colGreen: #27ae60;
 
   > span:before {
     display: block;
-    content: " ";
-    height: 6px;
-    width: 6px;
-    border-radius: 50%;
-    margin-right: 7.5px;
-    background: $colRed;
+    content: "⚠";
+    margin-right: 3px;
   }
 }
 
@@ -130,15 +152,47 @@ $colGreen: #27ae60;
           margin-right: 0;
         }
       }
+
       > .name-actual {
         font-family: monospace;
         color: $colAccent;
         font-weight: 600;
       }
+
       > .size {
         color: $colGray3;
       }
     }
+  }
+}
+
+.UbField.--uploading > .file-selected {
+  > .details {
+    .status {
+      color: $colGray5;
+    }
+
+    .name {
+      > .name-actual {
+        color: $colAccent;
+        animation: ub-upload-text-pulsate 3s infinite alternate ease-in-out;
+      }
+    }
+  }
+}
+
+@keyframes ub-upload-text-pulsate {
+  0% {
+    color: $colAccent;
+  }
+  25% {
+    color: $colGreen;
+  }
+  50% {
+    color: $colAccent;
+  }
+  75% {
+    color: $colGreen;
   }
 }
 
@@ -160,6 +214,7 @@ $colGreen: #27ae60;
     font-weight: 600;
     transition: color .1s ease;
   }
+
   > .ub-btn {
     justify-self: flex-end;
     flex-grow: 0;
@@ -175,9 +230,11 @@ $colGreen: #27ae60;
     justify-content: center;
     align-items: center;
   }
+
   > .message {
     color: $colAccent;
   }
+
   > .ub-btn {
     display: none;
   }

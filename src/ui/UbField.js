@@ -136,6 +136,10 @@ export default class UbField {
       hasFile = true;
     }
 
+    if (this._isUploading) {
+      hasFile = true;
+    }
+
     if (!hasFile) {
       element.classList.add("--no-file");
 
@@ -149,7 +153,21 @@ export default class UbField {
   </div>
 `;
     } else {
-      let nameActual;
+      element.classList.add("--has-file");
+
+      // ---
+
+      let statusText = this._config.text.file_selected;
+
+      if (this._isUploading) {
+        element.classList.add("--uploading");
+        statusText = this._config.text.file_uploading;
+      }
+
+      // ---
+
+      let nameActual = "";
+      let sizeIndicator = "";
 
       if (this._fileInfo.url && this._fileInfo.url.indexOf('data:') !== 0) {
         nameActual = `<a href="${this._fileInfo.url || "#"}" target="_blank" class="name-actual">${this._fileInfo.name || "File"}</a>`;
@@ -157,18 +175,33 @@ export default class UbField {
         nameActual = `<span class="name-actual">${this._fileInfo.name || "File"}</span>`;
       }
 
-      element.classList.add("--has-file");
+      if (this._fileInfo.size) {
+        sizeIndicator = `<span class="size">(${Math.ceil(this._fileInfo.size / 1024)}kb)</span>`;
+      }
+
+      // ---
+
+      let controls = "";
+
+      if (this._fileInfo.uploaded) {
+        controls = `<a class="ub-btn --delete" href="#">${this._config.text.delete}</a>`;
+      } else if (this._isUploading) {
+        controls = `<div class="ub-prog"><div class="prog-inner" style="width: ${this._uploadProgress.toFixed(2)}%;"></div></div>`;
+      }
+
+      // ---
+
       element.innerHTML += `
   <div class="file-selected">
     <div class="details">
-        <h6 class="status">${this._config.text.file_selected}</h6>
+        <h6 class="status">${statusText}</h6>
         <div class="name">
             ${nameActual}
-            <span class="size">(${Math.ceil(this._fileInfo.size / 1024)}kb)</span>
+            ${sizeIndicator}
         </div>
     </div>
     <div class="controls">
-        <a class="ub-btn --delete" href="#">${this._config.text.delete}</a>
+        ${controls}
     </div>
   </div>
   ${this._renderExtensions()}
@@ -378,7 +411,7 @@ export default class UbField {
     xhr.open('POST', url, true);
     xhr.upload.addEventListener("progress", (e) => {
       this._uploadProgress = ((e.loaded * 100.0 / e.total) || 100);
-      this._setUp(); // TODO Optimize, prevent full re-render
+      this._element.querySelector(".ub-prog .prog-inner").style.width = `${this._uploadProgress.toFixed(2)}%`;
     });
     xhr.addEventListener('readystatechange', (e) => {
       if (xhr.readyState === 4) {
