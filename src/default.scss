@@ -64,6 +64,36 @@ $colGreen: #27ae60;
 
 // ---------------------------------------------------------------------------------------------------------------------
 
+.UbField > .error-bar {
+  border-bottom: 1px solid rgba(0, 0, 0, .1);
+  color: $colRed;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 10px 15px;
+  background: #fff4f7;
+
+  &, > span {
+    display: flex;
+    align-items: center;
+  }
+
+  > span:before {
+    display: block;
+    content: " ";
+    height: 6px;
+    width: 6px;
+    border-radius: 50%;
+    margin-right: 7.5px;
+    background: $colRed;
+  }
+}
+
+.UbField.--no-file > .error-bar {
+  border-bottom-style: dashed;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
 .UbField > .file-selected {
   width: 100%;
   height: 100%;

@@ -76,6 +76,7 @@ export default class UbField {
     this._config = ubfConfig;
 
     // State info
+    this._error = "";
     this._isDropArea = false;
     this._isDeleting = false;
     this._fileInfo = null;
@@ -115,7 +116,18 @@ export default class UbField {
 
     element.className = "";
     element.classList.add("UbField");
+    element.innerHTML = "";
 
+    // Prefix error message if one is present
+    if (this._error) {
+      element.innerHTML += `
+  <div class="error-bar">
+    <span>${this._error}</span>
+  </div>
+`;
+    }
+
+    // Determine whether we are presenting a file, or presenting an upload field
     let hasFile = !!this._field.value;
 
     if (this._config.file && !this._isDeleting) {
@@ -130,7 +142,7 @@ export default class UbField {
       if (this._isDropArea)
         element.classList.add("--dropping-file");
 
-      element.innerHTML = `
+      element.innerHTML += `
   <div class="no-file">
     <span class="message">${this._isDropArea ? this._config.text.drop_file : this._config.text.no_file}</span>
     <a class="ub-btn --browse" href="#">${this._config.text.browse}</a>
@@ -146,7 +158,7 @@ export default class UbField {
       }
 
       element.classList.add("--has-file");
-      element.innerHTML = `
+      element.innerHTML += `
   <div class="file-selected">
     <div class="details">
         <h6 class="status">${this._config.text.file_selected}</h6>
@@ -217,12 +229,14 @@ export default class UbField {
     return output;
   }
 
-// -------------------------------------------------------------------------------------------------------------------
-// Events
+  // -------------------------------------------------------------------------------------------------------------------
+  // Events
 
   _onBrowseClick(e) {
     e.preventDefault();
     e.stopPropagation();
+
+    this._error = null;
 
     // "Click" the field to force browse dialog to open
     this._field.click();
@@ -233,6 +247,8 @@ export default class UbField {
   _onDeleteClick(e) {
     e.preventDefault();
     e.stopPropagation();
+
+    this._error = null;
 
     // Clear selection
     this._field.value = "";
@@ -309,8 +325,7 @@ export default class UbField {
     }
 
     if (files.length > 1) {
-      // TODO Nice UI Error
-      alert('1 file limit');
+      this._error = this._config.text.max_files_error;
       return;
     }
 
@@ -342,9 +357,10 @@ export default class UbField {
   }
 
   _uploadFile(file) {
+    this._error = null;
+
     if (this._isUploading) {
-      // TODO handle better
-      alert('upload already in progress');
+      this._error = this._config.text.already_uploading;
       return;
     }
 
@@ -376,19 +392,30 @@ export default class UbField {
       } else {
         // Upload failure
         this._isUploading = false;
-        this._uploadProgress = 100;
+        this._uploadProgress = 0;
 
-        alert('upload failure');
+        this._error = this._config.text.upload_failed;
 
-        // TODO Handle optional error from response + error UI
+        this._field.value = "";
+        this._fileInfo = null;
+
+        this._setUp();
+
+        // TODO Handle optional error from response body
       }
     })
     .catch((err) => {
+      console.error('[upload-buddy]', '(UbField)', 'File upload error:', err);
+
       this._isUploading = false;
       this._uploadProgress = 0;
 
-      // TODO Nice UI Error
-      alert('upload errored: ' + err);
+      this._error = this._config.text.upload_failed;
+
+      this._field.value = "";
+      this._fileInfo = null;
+
+      this._setUp();
     });
   }
 }

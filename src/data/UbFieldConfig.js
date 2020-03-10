@@ -46,7 +46,10 @@ export default class UbFieldConfig {
       "drop_file": "Drop it like it's hot",
       "file_selected": "File selected",
       "browse": "Browse",
-      "delete": "Remove"
+      "delete": "Remove",
+      "already_uploading": "An upload is already in progress",
+      "max_files_error": "You can only upload one file",
+      "upload_failed": "Upload failed"
     };
 
     this.translations = {
