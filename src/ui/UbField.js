@@ -394,6 +394,7 @@ export default class UbField {
 
     if (this._isUploading) {
       this._error = this._config.text.already_uploading;
+      this._setUp();
       return;
     }
 
@@ -421,8 +422,15 @@ export default class UbField {
     xhr.addEventListener('readystatechange', (e) => {
       if (xhr.readyState === 4) {
         if (xhr.status === 200) {
-          // Done. Inform the user
-          alert('upload win'); // TODO UI work
+          // Done. Update the UI
+          this._isUploading = false;
+          this._uploadProgress = 100;
+
+          this.error = "";
+
+          this._fileInfo.uploaded = true;
+
+          this._setUp();
         } else {
           // Non-200 state
           console.error('[upload-buddy]', '(UbField)', 'File upload error:', xhr.responseText);
