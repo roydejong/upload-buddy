@@ -284,6 +284,19 @@ $progHeight: 12px;
     color: $colGray5;
     font-size: 1.4rem;
     padding: 10px 15px;
+
+    &, > span {
+      display: flex;
+      align-items: center;
+    }
+
+    > .resolution {
+      &:before {
+        content: "📐";
+        display: inline-block;
+        margin-right: 3px;
+      }
+    }
   }
 }
 

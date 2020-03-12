@@ -123,8 +123,7 @@ export default class UbField {
 
   /**
    * Initializes or updates the UbField in the DOM.
-   *
-   * @private
+   * This will cause a full re-render of the field and any extensions.
    */
   update() {
     // Hide original element

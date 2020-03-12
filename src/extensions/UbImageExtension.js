@@ -2,6 +2,8 @@ import UbExtension from "./UbExtension";
 
 const UbImageExtension = new UbExtension();
 
+UbImageExtension._images = { };
+
 UbImageExtension.match = (field, fileInfo) => {
   if (!fileInfo.url) {
     // Not marked as "uploaded" yet, or URL is missing
@@ -39,13 +41,34 @@ UbImageExtension.match = (field, fileInfo) => {
 };
 
 UbImageExtension.render = (field, fileInfo) => {
+  // 1. We can only render if we have a file URL; either a real URL or base64/data URL
+  const url = fileInfo.url;
+
+  if (!url) {
+    return "";
+  }
+
+  // 2. If we haven't already, (pre)load the image to request its metadata
+  if (!UbImageExtension._images[url]) {
+    let newImg = document.createElement('img');
+    newImg.onload = function () {
+      UbImageExtension._images[url] = newImg;
+      field.update();
+    };
+    newImg.src = url;
+    return "";
+  }
+
+  // 3. Once we have the image preloaded for the given URL, we can finally render the extension
+  const img = UbImageExtension._images[url];
+
   return `
 <div class="UbImageExtension">
     <div class="ext-image-preview">
-        <img class="ext-image-preview" src="${fileInfo.url}" alt="Preview"/>      
+        ${img.outerHTML}     
     </div>
     <div class="ext-image-stats">
-      <span>Image statistics are loading</span>
+      <span class="resolution">${img.width} × ${img.height} px</span>
     </div>
 </div>
 `;
