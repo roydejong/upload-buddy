@@ -9,6 +9,8 @@ Here's what we have to offer:
 - 🔎 Inline image preview + crop tool integration.
 - 📄 Easy to integrate & supports showing pre-filled file values.
 
+## Preview
+
 <p align="center">
 
 ![UbField idle, default style](docs/ss-control-blank.png)
