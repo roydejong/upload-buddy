@@ -332,9 +332,11 @@ export default class UbField {
     return false;
   }
 
-  _onDeleteClick(e) {
-    e.preventDefault();
-    e.stopPropagation();
+  _onDeleteClick(e = null) {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
 
     this._error = null;
 
@@ -464,13 +466,14 @@ export default class UbField {
     this._uploadProgress = 0;
     this._backField.value = "";
 
+    this.update();
+
     const url = this.config.target;
 
     let payload = new FormData();
     payload.append('file', file);
 
     let xhr = new XMLHttpRequest();
-
     xhr.open('POST', url, true);
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
@@ -497,7 +500,7 @@ export default class UbField {
               let asObject = JSON.parse(xhr.responseText);
 
               if (asObject && typeof asObject === "object") {
-                this._fileInfo = Object.assign({ }, {
+                this._fileInfo = Object.assign({}, {
                   name: this._fileInfo.name,
                   size: this._fileInfo.size,
                   url: this._fileInfo.url,
@@ -537,5 +540,57 @@ export default class UbField {
       }
     });
     xhr.send(payload);
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+  // Upload utilities
+
+  /**
+   * Converts a data: URL to a file (e.g. for base 64 encoded images after cropping).
+   *
+   * @source https://uploadcare.com/community/t/how-to-upload-base64-encoded-image-from-javascript/53
+   *
+   * @param {string} dataUrl - The raw data: image URL.
+   * @param {string} filename - The "original" file name to assign to it.
+   * @returns {File}
+   */
+  static convertDataUrlToFile(dataUrl, filename) {
+    let arr = dataUrl.split(','),
+      mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]),
+      n = bstr.length,
+      u8arr = new Uint8Array(n);
+
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+
+    return new File([u8arr], filename, {type: mime});
+  }
+
+  /**
+   * Takes a data: blob URL, converts it to a file, and attempts to upload it.
+   * This action will replace any existing file input.
+   *
+   * @param dataUrl
+   * @param filename
+   */
+  uploadDataUrlAsFile(dataUrl, filename) {
+    const file = UbField.convertDataUrlToFile(dataUrl, filename);
+
+    if (file) {
+      // Clear the input, as if delete is pressed
+      this._onDeleteClick(null);
+
+      // Modify local state, add file info
+      console.log('[upload-buddy]', '(UbField)', 'Virtual file selection (from data URL):', file);
+
+      this._fileInfo = file;
+      this._fileInfo.uploaded = false;
+      this._fileInfo.url = dataUrl;
+
+      // Perform the upload
+      this._uploadFile(file);
+    }
   }
 }

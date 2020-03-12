@@ -109,9 +109,12 @@ UbImageExtension.after = (field, fileInfo) => {
       e.preventDefault();
 
       if (imgDom.cropper) {
-        // Already cropping
+        // Already cropping, grab output
+        let newData = imgDom.cropper.getCroppedCanvas().toDataURL(fileInfo.type || 'image/png');
         imgDom.cropper.destroy();
-        field.update();
+
+        // ...and re-upload as if this is a new file, with old filename
+        field.uploadDataUrlAsFile(newData, fileInfo.name);
       } else {
         // Not yet cropping
         // Add "cropping" class to allow the preview to grow in height
@@ -137,12 +140,6 @@ UbImageExtension.after = (field, fileInfo) => {
       return false;
     });
   }
-};
-
-// ---------------------------------------------------------------------------------------------------------------------
-
-UbImageExtension.crop = (field, file, img) => {
-  alert(img.href);
 };
 
 // ---------------------------------------------------------------------------------------------------------------------
