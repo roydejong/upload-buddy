@@ -57,6 +57,11 @@ $colGreen: #27ae60;
     color: #fff;
   }
 
+  &.--save {
+    background: $colGreen;
+    color: #fff;
+  }
+
   &:hover {
     box-shadow: inset 0 0 999px rgba(255, 255, 255, .1);
   }
@@ -277,6 +282,12 @@ $progHeight: 12px;
       max-height: 200px;
       object-fit: cover;
       border: none;
+    }
+  }
+
+  > .ext-image-preview.--cropping {
+    &, > img {
+      max-height: 600px;
     }
   }
 

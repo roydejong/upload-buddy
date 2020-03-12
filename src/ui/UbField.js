@@ -290,9 +290,11 @@ export default class UbField {
     });
 
     // Extension event bindings
-    this._renderedExtensions.forEach((ext) => {
-      ext.after(this, this._fileInfo);
-    });
+    setTimeout(() => {
+      this._renderedExtensions.forEach((ext) => {
+        ext.after(this, this._fileInfo);
+      });
+    }, 0);
   }
 
   // -------------------------------------------------------------------------------------------------------------------

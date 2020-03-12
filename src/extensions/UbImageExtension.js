@@ -93,12 +93,47 @@ UbImageExtension.render = (field, fileInfo) => {
 // ---------------------------------------------------------------------------------------------------------------------
 
 UbImageExtension.after = (field, fileInfo) => {
-  let cropButton = field.domElement.querySelector('.UbImageExtension .ub-btn.--go-cropper');
+  const parent = field.domElement.querySelector('.UbImageExtension');
 
-  if (cropButton) {
+  if (!parent) {
+    return;
+  }
+
+  const imgDom = parent.querySelector('.ext-image-preview > img');
+  const imgParent = parent.querySelector('.ext-image-preview');
+  const cropButton = parent.querySelector('.ub-btn.--go-cropper');
+  const resolutionStat = parent.querySelector('.ext-image-stats .resolution');
+
+  if (imgDom && imgParent && cropButton) {
     cropButton.addEventListener('click', (e) => {
       e.preventDefault();
-      alert('!');
+
+      if (imgDom.cropper) {
+        // Already cropping
+        imgDom.cropper.destroy();
+        field.update();
+      } else {
+        // Not yet cropping
+        // Add "cropping" class to allow the preview to grow in height
+        imgParent.classList.add("--cropping");
+
+        // Modify "crop" button to "save" button
+        cropButton.textContent = field.config.text.save;
+        cropButton.classList.add("--save");
+
+        // Activate cropper.js
+        let _updateCropStats = (e2) => {
+          const data = imgDom.cropper.getData(true);
+          resolutionStat.textContent = `${field.config.text.crop}: ${data.width} × ${data.height} px`;
+        };
+
+        imgDom.cropper = new window.Cropper(imgDom, {
+          cropstart: _updateCropStats,
+          cropmove: _updateCropStats,
+          crop: _updateCropStats
+        });
+      }
+
       return false;
     });
   }

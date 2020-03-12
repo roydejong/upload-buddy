@@ -51,7 +51,8 @@ export default class UbFieldConfig {
       "max_files_error": "You can only upload one file",
       "upload_failed": "Upload failed",
       "file_uploading": "Uploading file...",
-      "crop": "Crop"
+      "crop": "Crop",
+      "save": "Save"
     };
 
     this.translations = {
@@ -65,7 +66,8 @@ export default class UbFieldConfig {
         "max_files_error": "Kies maximaal 1 bestand",
         "upload_failed": "Het bestand kon niet geüpload worden",
         "file_uploading": "Bestand wordt geupload...",
-        "crop": "Bijsnijden"
+        "crop": "Bijsnijden",
+        "save": "Opslaan"
       }
     };
 
