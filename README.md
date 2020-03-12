@@ -1,5 +1,7 @@
 # 💚 Upload Buddy
 
+![npm](https://img.shields.io/npm/v/upload-buddy?style=flat-square)
+
 **Upload Buddy is a lightweight JavaScript library that makes it easy to integrate smart, interactive file uploads into any form.**
 
 Here's what we have to offer:
