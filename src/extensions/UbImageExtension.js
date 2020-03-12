@@ -1,8 +1,8 @@
 import UbExtension from "./UbExtension";
 
-const UbImagePreviewExtension = new UbExtension();
+const UbImageExtension = new UbExtension();
 
-UbImagePreviewExtension.match = (fileInfo) => {
+UbImageExtension.match = (field, fileInfo) => {
   if (!fileInfo.url) {
     // Not marked as "uploaded" yet, or URL is missing
     return false;
@@ -38,10 +38,17 @@ UbImagePreviewExtension.match = (fileInfo) => {
   return false;
 };
 
-UbImagePreviewExtension.render = (fileInfo) => {
+UbImageExtension.render = (field, fileInfo) => {
   return `
-  <img class="ext-image-preview" src="${fileInfo.url}" alt="Preview"/>
+<div class="UbImageExtension">
+    <div class="ext-image-preview">
+        <img class="ext-image-preview" src="${fileInfo.url}" alt="Preview"/>      
+    </div>
+    <div class="ext-image-stats">
+      <span>Image statistics are loading</span>
+    </div>
+</div>
 `;
 };
 
-export default UbImagePreviewExtension;
+export default UbImageExtension;

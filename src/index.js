@@ -2,13 +2,13 @@
 
 import UbField from "./ui/UbField";
 import UbFieldConfig from "./data/UbFieldConfig";
-import UbImagePreviewExtension from "./extensions/UbImagePreviewExtension";
+import UbImageExtension from "./extensions/UbImageExtension";
 
 window.UbField = UbField;
 window.UbFieldConfig = UbFieldConfig;
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-window.UbImagePreviewExtension = UbImagePreviewExtension;
+window.UbImagePreviewExtension = UbImageExtension;
 
 // ---------------------------------------------------------------------------------------------------------------------

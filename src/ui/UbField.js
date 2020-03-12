@@ -118,7 +118,7 @@ export default class UbField {
     this._form.addEventListener("submit", this._onFormSubmit);
 
     // Go!
-    this._setUp();
+    this.update();
   }
 
   /**
@@ -126,7 +126,7 @@ export default class UbField {
    *
    * @private
    */
-  _setUp() {
+  update() {
     // Hide original element
     this._field.classList.add("--ub-hidden");
     this._field.type = "file";
@@ -192,7 +192,7 @@ export default class UbField {
       let nameActual = "";
       let sizeIndicator = "";
 
-      if (this._fileInfo.url && this._fileInfo.url.indexOf('data:') !== 0) {
+      if (this._fileInfo && this._fileInfo.url && this._fileInfo.url.indexOf('data:') !== 0) {
         nameActual = `<a href="${this._fileInfo.url || "#"}" target="_blank" class="name-actual">${this._fileInfo.name || "File"}</a>`;
       } else {
         nameActual = `<span class="name-actual">${this._fileInfo.name || "File"}</span>`;
@@ -276,8 +276,8 @@ export default class UbField {
 
     if (this._fileInfo) {
       this._config.extensions.forEach((extension) => {
-        if (extension.match(this._fileInfo) === true) {
-          output += extension.render(this._fileInfo);
+        if (extension.match(this, this._fileInfo) === true) {
+          output += extension.render(this, this._fileInfo);
         }
       });
     }
@@ -316,7 +316,7 @@ export default class UbField {
     this._backField.value = "";
 
     // Refresh UI
-    this._setUp();
+    this.update();
 
     return false;
   }
@@ -359,13 +359,13 @@ export default class UbField {
     const files = dt.files;
 
     this._handleFiles(files);
-    this._setUp();
+    this.update();
   }
 
   _onFieldChange(e) {
     // Handle files & refresh UI
     this._handleFiles(this._field.files);
-    this._setUp();
+    this.update();
   }
 
   _onFormSubmit(e) {
@@ -407,7 +407,7 @@ export default class UbField {
         const result = reader.result;
         if (result && this._fileInfo.name === file.name && !this._fileInfo.url) {
           this._fileInfo.url = result;
-          this._setUp();
+          this.update();
         }
       };
       reader.readAsDataURL(file);
@@ -424,7 +424,7 @@ export default class UbField {
 
     if (this._isUploading) {
       this._error = this._config.text.already_uploading;
-      this._setUp();
+      this.update();
       return;
     }
 
@@ -480,7 +480,7 @@ export default class UbField {
           this._fileInfo.uploaded = true;
           this._backField.value = JSON.stringify(this._fileInfo);
 
-          this._setUp();
+          this.update();
         } else {
           // Non-200 state
           console.error('[upload-buddy]', '(UbField)', 'File upload error:', xhr.responseText);
@@ -500,7 +500,7 @@ export default class UbField {
             this._error = this._config.text.upload_failed;
           }
 
-          this._setUp();
+          this.update();
         }
       }
     });

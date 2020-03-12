@@ -1,4 +1,4 @@
-import UbImagePreviewExtension from "../extensions/UbImagePreviewExtension";
+import UbImageExtension from "../extensions/UbImageExtension";
 
 export default class UbFieldConfig {
   constructor(props) {
@@ -96,6 +96,6 @@ export default class UbFieldConfig {
 UbFieldConfig.defaults = {
   lang: "en",
   extensions: [
-    UbImagePreviewExtension
+    UbImageExtension
   ]
 };
