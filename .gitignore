@@ -1,6 +1,12 @@
+## Dependencies
+node_modules/
+
 ## IDE-specific
 .idea/workspace.xml
 
 ## Build output
 dist/*.js
 dist/default.css*
+
+## Build artifacts
+.sass-cache/
