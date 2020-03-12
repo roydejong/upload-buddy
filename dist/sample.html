@@ -26,6 +26,7 @@
 <script src="upbud.min.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function (e) {
+    // Set up UbField with a pre-filled file value
     UbField.setup('#the-file', {
       lang: "en",
       text: {
@@ -35,8 +36,19 @@
         name: "blah.jpg",
         size: 79000,
         url: "https://live.staticflickr.com/4561/38054606355_26429c884f_b.jpg",
-        type: "image/png"
+        type: "image/png",
+        custom: "metadata"
       }
+    });
+
+    // Intercept the form value for demo purposes
+    document.getElementById('the-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const value = document.querySelector('#the-form input[name="the-file"]').value;
+      alert(`The form value for "the-file" is:\r\n${value ? value : '(Empty string)'}`);
+
+      return false;
     });
   });
 </script>
