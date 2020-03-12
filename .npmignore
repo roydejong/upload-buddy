@@ -1,2 +1,11 @@
-# IDE files
+## Dependencies
+node_modules/
+
+## All IDE
 .idea/
+
+## Build artifacts
+.sass-cache/
+
+## Docs images
+docs/
