@@ -9,7 +9,15 @@ Here's what we have to offer:
 - 🔎 Inline image preview + crop tool integration.
 - 📄 Easy to integrate & supports showing pre-filled file values.
 
+<p align="center">
+
+![UbField idle, default style](docs/ss-control-blank.png)
+
+↓
+
 ![UbField in action, default style](docs/ss-control-filled.png)
+
+</p>
 
 ## Installation
 This library is available as a package on npm: `upload-buddy`.
