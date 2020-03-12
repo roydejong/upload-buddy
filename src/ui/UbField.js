@@ -79,9 +79,8 @@ export default class UbField {
      * Configuration data for this field.
      *
      * @type {UbFieldConfig}
-     * @private
      */
-    this._config = ubfConfig;
+    this.config = ubfConfig;
 
     // Create backing field
     this._backField = document.createElement('input');
@@ -101,6 +100,12 @@ export default class UbField {
     this._isUploading = false;
     this._uploadProgress = 0.0;
 
+    /**
+     * @type {UbExtension[]}
+     * @private
+     */
+    this._renderedExtensions = [];
+
     // Event references
     this._onBrowseClick = this._onBrowseClick.bind(this);
     this._onDeleteClick = this._onDeleteClick.bind(this);
@@ -119,6 +124,24 @@ export default class UbField {
 
     // Go!
     this.update();
+  }
+
+  /**
+   * Gets the field name.
+   *
+   * @returns {string}
+   */
+  get name() {
+    return this._backField.name;
+  }
+
+  /**
+   * Gets a selector for the UbField UI element.
+   *
+   * @returns {Element}
+   */
+  get domElement() {
+    return this._element;
   }
 
   /**
@@ -152,9 +175,9 @@ export default class UbField {
     // Determine whether we are presenting a file, or presenting an upload field
     let hasFile = (!!this._field.value || (this._fileInfo && this._fileInfo.uploaded) || this._isUploading);
 
-    if (this._config.file && !this._isDeleting) {
+    if (this.config.file && !this._isDeleting) {
       // Already-selected file info for the UI
-      this._fileInfo = this._config.file;
+      this._fileInfo = this.config.file;
 
       this._backField.value = JSON.stringify(this._fileInfo);
       this._field.value = "";
@@ -170,8 +193,8 @@ export default class UbField {
 
       element.innerHTML += `
   <div class="no-file">
-    <span class="message">${this._isDropArea ? this._config.text.drop_file : this._config.text.no_file}</span>
-    <a class="ub-btn --browse" href="#">${this._config.text.browse}</a>
+    <span class="message">${this._isDropArea ? this.config.text.drop_file : this.config.text.no_file}</span>
+    <a class="ub-btn --browse" href="#">${this.config.text.browse}</a>
   </div>
 `;
     } else {
@@ -179,11 +202,11 @@ export default class UbField {
 
       // ---
 
-      let statusText = this._config.text.file_selected;
+      let statusText = this.config.text.file_selected;
 
       if (this._isUploading) {
         element.classList.add("--uploading");
-        statusText = this._config.text.file_uploading;
+        statusText = this.config.text.file_uploading;
       }
 
       // ---
@@ -206,7 +229,7 @@ export default class UbField {
       let controls = "";
 
       if (this._fileInfo.uploaded) {
-        controls = `<a class="ub-btn --delete" href="#">${this._config.text.delete}</a>`;
+        controls = `<a class="ub-btn --delete" href="#">${this.config.text.delete}</a>`;
       } else if (this._isUploading) {
         controls = `<div class="ub-prog"><div class="prog-inner" style="width: ${this._uploadProgress.toFixed(2)}%;"></div></div>`;
       }
@@ -265,6 +288,11 @@ export default class UbField {
         element.addEventListener('click', this._onBrowseClick);
       }
     });
+
+    // Extension event bindings
+    this._renderedExtensions.forEach((ext) => {
+      ext.after(this, this._fileInfo);
+    });
   }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -272,15 +300,18 @@ export default class UbField {
 
   _renderExtensions() {
     let output = "";
+    let renderedExtensions = [];
 
     if (this._fileInfo) {
-      this._config.extensions.forEach((extension) => {
+      this.config.extensions.forEach((extension) => {
         if (extension.match(this, this._fileInfo) === true) {
           output += extension.render(this, this._fileInfo);
+          renderedExtensions.push(extension);
         }
       });
     }
 
+    this._renderedExtensions = renderedExtensions;
     return output;
   }
 
@@ -328,7 +359,7 @@ export default class UbField {
     if (!this._isDropArea) {
       this._isDropArea = true;
       this._element.classList.add("--dropping-file");
-      this._element.querySelector(".no-file > .message").textContent = this._config.text.drop_file;
+      this._element.querySelector(".no-file > .message").textContent = this.config.text.drop_file;
     }
   }
 
@@ -336,7 +367,7 @@ export default class UbField {
     if (this._isDropArea) {
       this._isDropArea = false;
       this._element.classList.remove("--dropping-file");
-      this._element.querySelector(".no-file > .message").textContent = this._config.text.no_file;
+      this._element.querySelector(".no-file > .message").textContent = this.config.text.no_file;
     }
   }
 
@@ -387,7 +418,7 @@ export default class UbField {
     }
 
     if (files.length > 1) {
-      this._error = this._config.text.max_files_error;
+      this._error = this.config.text.max_files_error;
       return;
     }
 
@@ -422,7 +453,7 @@ export default class UbField {
     this._error = null;
 
     if (this._isUploading) {
-      this._error = this._config.text.already_uploading;
+      this._error = this.config.text.already_uploading;
       this.update();
       return;
     }
@@ -431,7 +462,7 @@ export default class UbField {
     this._uploadProgress = 0;
     this._backField.value = "";
 
-    const url = this._config.target;
+    const url = this.config.target;
 
     let payload = new FormData();
     payload.append('file', file);
@@ -496,7 +527,7 @@ export default class UbField {
             this._error = xhr.responseText;
           } else {
             // Doesn't look like an error message we can display, use generic error
-            this._error = this._config.text.upload_failed;
+            this._error = this.config.text.upload_failed;
           }
 
           this.update();

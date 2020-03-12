@@ -4,7 +4,6 @@
     <meta charset="utf-8"/>
     <title>UploadBuddy Sample</title>
     <link rel="stylesheet" href="sample.css"/>
-    <link rel="stylesheet" href="default.css"/>
 </head>
 <body>
 
@@ -23,15 +22,24 @@
 
 </form>
 
+<!-- Include cropper.js before upload-buddy to demonstrate integration -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.6/cropper.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.6/cropper.min.css"/>
+
+<!-- Include upload-buddy -->
 <script src="upbud.min.js"></script>
+<link rel="stylesheet" href="default.css"/>
+
+<!-- On DOM ready, activate upload-buddy for the target field -->
 <script>
   document.addEventListener("DOMContentLoaded", function (e) {
-    // Set up UbField with a pre-filled file value
+    // Wrap your file input with the upload-buddy field (UbField)
     UbField.setup('#the-file', {
       lang: "en",
       text: {
         "drop_file": "🔥 Drop it like it's hot 🔥"
       },
+      // On page init: we'll show a previous file value
       file: {
         name: "prefilled-file-value.jpg",
         size: 79000,
@@ -41,7 +49,7 @@
       }
     });
 
-    // Intercept the form value for demo purposes
+    // Intercept the form value (just for demo purposes)
     document.getElementById('the-form').addEventListener('submit', (e) => {
       e.preventDefault();
 

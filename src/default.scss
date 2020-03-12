@@ -50,6 +50,7 @@ $colGreen: #27ae60;
   overflow: hidden;
   transition: all .1s ease;
   border: 1px solid rgba(0, 0, 0, .1);
+  cursor: pointer;
 
   &.--delete {
     background: $colRed;
@@ -273,7 +274,7 @@ $progHeight: 12px;
       min-width: 100%;
       min-height: 100px;
       max-width: 100%;
-      max-height: 333px;
+      max-height: 200px;
       object-fit: cover;
       border: none;
     }
@@ -284,6 +285,7 @@ $progHeight: 12px;
     color: $colGray5;
     font-size: 1.4rem;
     padding: 10px 15px;
+    min-width: 100%;
 
     &, > span {
       display: flex;
@@ -291,11 +293,17 @@ $progHeight: 12px;
     }
 
     > .resolution {
+      flex-grow: 1;
+
       &:before {
         content: "📐";
         display: inline-block;
         margin-right: 3px;
       }
+    }
+
+    > .ub-btn {
+      align-self: flex-end;
     }
   }
 }

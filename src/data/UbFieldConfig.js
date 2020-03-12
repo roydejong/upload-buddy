@@ -50,7 +50,8 @@ export default class UbFieldConfig {
       "already_uploading": "An upload is already in progress",
       "max_files_error": "You can only upload one file",
       "upload_failed": "Upload failed",
-      "file_uploading": "Uploading file..."
+      "file_uploading": "Uploading file...",
+      "crop": "Crop"
     };
 
     this.translations = {
@@ -63,7 +64,8 @@ export default class UbFieldConfig {
         "already_uploading": "Er is al een upload bezig",
         "max_files_error": "Kies maximaal 1 bestand",
         "upload_failed": "Het bestand kon niet geüpload worden",
-        "file_uploading": "Bestand wordt geupload..."
+        "file_uploading": "Bestand wordt geupload...",
+        "crop": "Bijsnijden"
       }
     };
 

@@ -1,7 +1,5 @@
 # 💚 Upload Buddy
 
-## Introduction
-
 **Upload Buddy is a lightweight JavaScript library that makes it easy to integrate smart, interactive file uploads into any form.**
 
 Here's what we have to offer:
@@ -71,3 +69,11 @@ When a file is selected by any means, a `POST` HTTP request will be sent to the 
     
 - **Any non-200 status code is seen as an error.**
     - You may optionally include a plain-text error message in the response body that will be shown to the user.
+    
+## Extras
+    
+### Cropper.js
+    
+Integration with [Cropper.js](https://github.com/fengyuanchen/cropperjs) is supported. Simply include the library before activating Upload Buddy, and when an image is selected, a "Crop" button will appear (we will test if `window.Cropper` is defined).
+
+Once the image has been cropped, it will be re-uploaded automatically, and the field's value will be updated accordingly.

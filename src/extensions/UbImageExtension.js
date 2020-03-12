@@ -1,8 +1,11 @@
 import UbExtension from "./UbExtension";
 
-const UbImageExtension = new UbExtension();
+// ---------------------------------------------------------------------------------------------------------------------
 
-UbImageExtension._images = { };
+const UbImageExtension = new UbExtension();
+UbImageExtension._images = {};
+
+// ---------------------------------------------------------------------------------------------------------------------
 
 UbImageExtension.match = (field, fileInfo) => {
   if (!fileInfo.url) {
@@ -40,6 +43,8 @@ UbImageExtension.match = (field, fileInfo) => {
   return false;
 };
 
+// ---------------------------------------------------------------------------------------------------------------------
+
 UbImageExtension.render = (field, fileInfo) => {
   // 1. We can only render if we have a file URL; either a real URL or base64/data URL
   const url = fileInfo.url;
@@ -62,6 +67,16 @@ UbImageExtension.render = (field, fileInfo) => {
   // 3. Once we have the image preloaded for the given URL, we can finally render the extension
   const img = UbImageExtension._images[url];
 
+  let extra = "";
+
+  // If crop is supported
+  const hasCropSupport = !!(typeof window.Cropper !== "undefined" && window.Cropper);
+
+  if (hasCropSupport) {
+    extra += `<a class="ub-btn --go-cropper">${field.config.text.crop}</a>`;
+  }
+
+  // Render output
   return `
 <div class="UbImageExtension">
     <div class="ext-image-preview">
@@ -69,9 +84,32 @@ UbImageExtension.render = (field, fileInfo) => {
     </div>
     <div class="ext-image-stats">
       <span class="resolution">${img.width} × ${img.height} px</span>
+      ${extra}
     </div>
 </div>
 `;
 };
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+UbImageExtension.after = (field, fileInfo) => {
+  let cropButton = field.domElement.querySelector('.UbImageExtension .ub-btn.--go-cropper');
+
+  if (cropButton) {
+    cropButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      alert('!');
+      return false;
+    });
+  }
+};
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+UbImageExtension.crop = (field, file, img) => {
+  alert(img.href);
+};
+
+// ---------------------------------------------------------------------------------------------------------------------
 
 export default UbImageExtension;
