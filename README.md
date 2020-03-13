@@ -26,7 +26,7 @@ Here's what we have to offer:
 ## Installation
 This library is available as a package on npm: `upload-buddy`.
 
-To use Upload Buddy, include `ubfield.min.js` on your page. We also recommend including our default stylesheet (`default.css`), unless you are planning on providing your own styles.
+To use Upload Buddy, include `upbud.min.js` on your page. We also recommend including our default stylesheet (`default.css`), unless you are planning on providing your own styles.
 
 ```html
 <script src="upload-buddy/dist/upbud.min.js"></script>
