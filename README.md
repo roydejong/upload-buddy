@@ -64,6 +64,11 @@ UbField.setup('#the-file', {
 
 ## Integration
 
+### Events
+
+#### `ub-ready`
+This event is emitted on the document when the script has loaded. This may be useful if you are loading the script with async/defer.
+
 ### Upload step
 
 If the input renders without a pre-filled `file` object in the configuration, or once "Delete" is clicked on a previously selected file, the field will instead appear empty:

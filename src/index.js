@@ -12,3 +12,5 @@ window.UbFieldConfig = UbFieldConfig;
 window.UbImagePreviewExtension = UbImageExtension;
 
 // ---------------------------------------------------------------------------------------------------------------------
+
+document.dispatchEvent(new CustomEvent('ub-ready'));
