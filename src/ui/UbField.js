@@ -31,6 +31,11 @@ export default class UbField {
 
     // Set up fields
     selection.forEach((element) => {
+      if (element.classList.contains('--ub-hidden') || element.getAttribute('ub-bound') !== null) {
+        // Skip element, already bound
+        return;
+      }
+
       try {
         new UbField(element, config);
       } catch (err) {
@@ -155,6 +160,7 @@ export default class UbField {
     this._field.style.display = "none";
     this._field.style.visibility = "hidden";
     this._field.style.position = "absolute";
+    this._field.setAttribute('ub-bound', "1");
 
     // Create replacement element
     const element = this._element || document.createElement('div');
