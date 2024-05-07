@@ -21,7 +21,7 @@ UbImageExtension.match = (field, fileInfo) => {
   if (fileInfo.name) {
     const fileName = fileInfo.name.toLowerCase();
 
-    let fileExtensions = ["png", "apng", "jpg", "jpeg", "gif", "svg", "ico"];
+    let fileExtensions = ["png", "apng", "jpg", "jpeg", "gif", "svg", "ico", "webp", "avif"];
     let extMatched = false;
 
     fileExtensions.forEach((extension) => {
