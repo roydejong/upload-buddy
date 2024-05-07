@@ -56,6 +56,40 @@ UbField.setup('#the-file', {
     url: "https://live.staticflickr.com/4561/38054606355_26429c884f_b.jpg",
     type: "image/png",
     custom: "metadata"
+  },
+  
+  // Optional callback functions:
+  /**
+   * Called when the user selects a file, right before the XHR request is sent.
+   * 
+   * @param {File} file Raw file object
+   */
+  onUploadStart: (file) => {
+    console.log(`Upload started: ${file.name}`);
+  },
+  /**
+   * Called when the upload progress changes.
+   * 
+   * @param {Number} progress Progress percentage
+   */
+  onUploadProgress: (progress) => {
+    console.log(`Upload progress: ${progress.toFixed(2)}%`);
+  },
+  /**
+   * Called when the upload is successful.
+   * 
+   * @param {?Object} response JSON response object from the server, if any
+   */
+  onUploadSuccess: (response) => {
+      console.log("Upload successful!", response);
+  },
+  /**
+   * Called when the upload fails for any reason.
+   *
+   * @param {?string} error Raw XHR response text, if any
+   */
+  onUploadError: (response) => {
+      console.error("Upload failed!", response);
   }
 });
 ```

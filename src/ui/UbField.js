@@ -459,6 +459,16 @@ export default class UbField {
     this._uploadFile(file);
   }
 
+  _tryTriggerCallback(callback, ...args) {
+    if (this.config[callback]) {
+      try {
+        this.config[callback](...args);
+      } catch (e) {
+        console.error('[upload-buddy]', '(UbField)', 'Error in config callback:', e);
+      }
+    }
+  }
+
   _uploadFile(file) {
     this._error = null;
 
@@ -479,6 +489,8 @@ export default class UbField {
     let payload = new FormData();
     payload.append('file', file);
 
+    this._tryTriggerCallback('onUploadStart', file);
+
     let xhr = new XMLHttpRequest();
     xhr.open('POST', url, true);
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -487,6 +499,7 @@ export default class UbField {
       if (e.total) {
         this._uploadProgress = ((e.loaded * 100.0 / e.total) || 100);
         this._element.querySelector(".ub-prog .prog-inner").style.width = `${this._uploadProgress.toFixed(2)}%`;
+        this._tryTriggerCallback('onUploadProgress', this._uploadProgress);
       }
     });
     xhr.addEventListener('readystatechange', (e) => {
@@ -499,6 +512,7 @@ export default class UbField {
           this._uploadProgress = 100;
           this._error = "";
 
+          let finalResponseObject = null;
           if (xhr.responseText) {
             try {
               // If a JSON object is returned in the response body, we will take it on board as file metadata
@@ -512,15 +526,18 @@ export default class UbField {
                   url: this._fileInfo.url,
                   type: this._fileInfo.type
                 }, asObject);
+                finalResponseObject = asObject;
               }
             } catch (e) {
             }
           }
 
+
           this._field.value = "";
           this._fileInfo.uploaded = true;
           this._backField.value = JSON.stringify(this._fileInfo);
 
+          this._tryTriggerCallback('onUploadSuccess', finalResponseObject);
           this.update();
         } else {
           // Non-200 state
@@ -541,6 +558,7 @@ export default class UbField {
             this._error = this.config.text.upload_failed;
           }
 
+          this._tryTriggerCallback('onUploadError', xhr.responseText);
           this.update();
         }
       }

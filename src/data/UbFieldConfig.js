@@ -2,7 +2,7 @@ import UbImageExtension from "../extensions/UbImageExtension";
 
 export default class UbFieldConfig {
   constructor(props) {
-    props = Object.assign({ }, UbFieldConfig.defaults, props || { });
+    props = Object.assign({}, UbFieldConfig.defaults, props || {});
 
     // -----------------------------------------------------------------------------------------------------------------
     // Basic props
@@ -76,7 +76,7 @@ export default class UbFieldConfig {
 
     if (props.lang && props.lang !== "en") {
       if (this.translations[props.lang]) {
-        this.text = Object.assign({ }, this.text, this.translations[props.lang]);
+        this.text = Object.assign({}, this.text, this.translations[props.lang]);
       } else {
         console.warn('[upload-buddy]', '(UbFieldConfig)',
           'Invalid language setting (translations do not exist):', props.lang);
@@ -84,13 +84,21 @@ export default class UbFieldConfig {
     }
 
     if (props.text) {
-      this.text = Object.assign({ }, this.text, props.text);
+      this.text = Object.assign({}, this.text, props.text);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Extensions
 
     this.extensions = props.extensions || [];
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Callbacks
+
+    this.onUploadStart = props.onUploadStart || null;
+    this.onUploadProgress = props.onUploadProgress || null;
+    this.onUploadSuccess = props.onUploadSuccess || null;
+    this.onUploadError = props.onUploadError || null;
   }
 }
 
