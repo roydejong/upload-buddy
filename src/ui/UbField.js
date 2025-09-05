@@ -269,17 +269,17 @@ export default class UbField {
     this._field.removeEventListener('change', this._onFieldChange);
     this._field.addEventListener('change', this._onFieldChange);
 
-    document.querySelectorAll(".ub-btn.--browse").forEach((element) => {
+    this._element.querySelectorAll(".ub-btn.--browse").forEach((element) => {
       element.removeEventListener('click', this._onBrowseClick);
       element.addEventListener('click', this._onBrowseClick);
     });
 
-    document.querySelectorAll(".ub-btn.--delete").forEach((element) => {
+    this._element.querySelectorAll(".ub-btn.--delete").forEach((element) => {
       element.removeEventListener('click', this._onDeleteClick);
       element.addEventListener('click', this._onDeleteClick);
     });
 
-    document.querySelectorAll(".UbField").forEach((element) => {
+    this._element.querySelectorAll(".UbField").forEach((element) => {
       element.removeEventListener('dragenter', this._onDragEnter);
       element.removeEventListener('dragleave', this._onDragLeave);
       element.removeEventListener('dragover', this._onDragOver);
