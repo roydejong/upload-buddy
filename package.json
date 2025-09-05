@@ -1,6 +1,6 @@
 {
   "name": "upload-buddy",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Upload Buddy makes it easy to integrate smart, interactive file uploads into any application.",
   "main": "src/index.js",
   "repository": "https://github.com/roydejong/upload-buddy",
@@ -15,7 +15,7 @@
   "scripts": {
     "build-code": "webpack --mode production",
     "build-style": "sass src/default.scss:dist/default.css",
-    "build": "yarn build-code && yarn build-style",
-    "prepublish": "yarn build"
+    "build": "npm run build-code && npm run build-style",
+    "prepublish": "npm run build"
   }
 }
